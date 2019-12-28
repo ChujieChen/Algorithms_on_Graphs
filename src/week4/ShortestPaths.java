@@ -42,8 +42,40 @@ public class ShortestPaths {
 	    	}
     	}
     	*/
+    	// TODO V-th iteration of Bellman-Ford
+    	// will give us relaxed nodes (they do not have shortest)
+    	// do BFS on them will get all nodes that have ZERO shortest
+    	HashSet<Integer> set = new HashSet<>();
+    	for(int u = 0; u < V; ++u) {
+    		boolean changed = false;
+			for(int vIdx = 0; vIdx < adj[u].size(); ++vIdx) {
+				changed = Relax(adj, cost, distance, reachable, shortest, u, vIdx);
+				if(changed) {
+					shortest[adj[u].get(vIdx)] = 0;
+					set.add(adj[u].get(vIdx));
+					}
+			}
+		}
+    	Queue<Integer> queue = new LinkedList<Integer>();
+    	for(int v: set) {
+    		queue.offer(v);
+    	}
+    	// TODO do BFS on those vertices
+    	// all visited notes should be marked with zero shortest
+    	while (!queue.isEmpty()) {
+			int u = queue.poll();
+			for(int vIdx = 0; vIdx < adj[u].size(); ++vIdx) {
+				int v = adj[u].get(vIdx);
+				if(shortest[v] == 1) {
+					shortest[v] = 0;
+					queue.offer(v);
+				}
+//				System.out.print("#");
+//				System.out.println(adj[u].get(vIdx)+1);
+			}
+		}
     }
-    /*
+    
     private static boolean Relax(ArrayList<Integer>[] adj, ArrayList<Integer>[] cost, long[] distance, int[] reachable,
 			int[] shortest, int u, int vIdx) {
 		// TODO Auto-generated method stub
@@ -59,7 +91,7 @@ public class ShortestPaths {
 		}
 		return false;
 	}
-	*/
+	
 
 	public static void main(String[] args) {
         Scanner scanner = new Scanner(System.in);
